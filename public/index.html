@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Queue</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="event-name">Demo Queue</h1>
+
+    <!-- Status banner -->
+    <div id="status-banner"></div>
+
+    <!-- Your position (shown after joining) -->
+    <div id="your-position" class="hidden"></div>
+
+    <!-- Join form -->
+    <div id="join-section">
+      <div class="section-header">Join the Queue</div>
+      <form id="join-form" class="card">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" maxlength="50" required placeholder="e.g. Jamie L.">
+        </div>
+        <div class="form-group">
+          <label for="project">What are you demoing?</label>
+          <input type="text" id="project" maxlength="140" required placeholder="e.g. AI-powered todo app">
+        </div>
+        <button type="submit" class="btn btn--primary" id="join-btn">Join Queue &rarr;</button>
+      </form>
+    </div>
+
+    <!-- Queue list -->
+    <div class="section-header" id="queue-header">Queue (0 waiting)</div>
+    <div id="queue-list"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/demoer.js"></script>
+</body>
+</html>

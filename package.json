@@ -1,0 +1,16 @@
+{
+  "name": "instademo",
+  "version": "1.0.0",
+  "description": "Live demo event queue manager",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.7.0"
+  }
+}

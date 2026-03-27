@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Demo Queue</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Login overlay -->
+  <div class="overlay" id="login-overlay">
+    <div class="overlay__card">
+      <h2>Admin Login</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="Enter admin password">
+        </div>
+        <div id="login-error" class="hidden" style="color: var(--red); font-size: 0.85rem; margin-bottom: 12px;"></div>
+        <button type="submit" class="btn btn--primary">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin dashboard (hidden until login) -->
+  <div class="container container--admin hidden" id="dashboard">
+    <h1 id="event-name">Admin</h1>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div class="status-bar__info">
+        <div class="status-indicator">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">Active</span>
+        </div>
+        <div id="queue-count" style="font-size: 0.85rem; color: var(--gray-600);"></div>
+      </div>
+      <button class="btn btn--small" id="pause-btn">Pause</button>
+    </div>
+
+    <!-- Current demoer -->
+    <div id="current-section"></div>
+
+    <!-- Queue list -->
+    <div class="section-header">Up Next</div>
+    <div id="queue-list"></div>
+
+    <!-- QR Code -->
+    <div class="section-header">QR Code</div>
+    <div class="card qr-section" id="qr-section">
+      <p class="empty">Loading QR code...</p>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
