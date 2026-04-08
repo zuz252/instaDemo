@@ -142,6 +142,22 @@ io.on("connection", (socket) => {
     queue.setDemoCap(cap);
     broadcastState();
   });
+
+  socket.on("admin:seed", ({ token }) => {
+    if (!auth.validateToken(token)) {
+      return socket.emit("admin:error", { message: "Unauthorized" });
+    }
+    queue.seedDemoers();
+    broadcastState();
+  });
+
+  socket.on("admin:reset", ({ token }) => {
+    if (!auth.validateToken(token)) {
+      return socket.emit("admin:error", { message: "Unauthorized" });
+    }
+    queue.reset();
+    broadcastState();
+  });
 });
 
 // --- Start ---

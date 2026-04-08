@@ -13,8 +13,6 @@
     joinBtn: document.getElementById("join-btn"),
     nameInput: document.getElementById("name"),
     projectInput: document.getElementById("project"),
-    queueHeader: document.getElementById("queue-header"),
-    queueList: document.getElementById("queue-list"),
   };
 
   // Load event name
@@ -53,7 +51,6 @@
     renderStatus(state);
     renderPosition(state);
     renderJoinSection(state);
-    renderQueue(state);
   });
 
   function renderStatus(state) {
@@ -111,11 +108,15 @@
           <div>It's your turn to demo!</div>
         </div>`;
     } else {
-      const pos = waiting.findIndex((d) => d.id === myId) + 1;
+      const ahead = waiting.findIndex((d) => d.id === myId);
+      const aheadText =
+        ahead === 0
+          ? "You're next!"
+          : `<strong>${ahead}</strong> ${ahead === 1 ? "person" : "people"} ahead of you`;
       els.yourPosition.innerHTML = `
         <div class="banner banner--you">
           <div class="banner__label">Your Position</div>
-          <div>You are <strong>#${pos}</strong> in line</div>
+          <div>${aheadText}</div>
         </div>`;
     }
     els.yourPosition.classList.remove("hidden");
@@ -136,32 +137,6 @@
       els.joinSection.classList.remove("hidden");
       els.joinBtn.disabled = false;
     }
-  }
-
-  function renderQueue(state) {
-    const waiting = state.queue.filter((d) => d.status === "waiting");
-    const capText = state.demoCap !== null ? ` · ${state.demoCap} max` : "";
-    els.queueHeader.textContent = `Queue (${waiting.length} waiting${capText})`;
-
-    if (waiting.length === 0) {
-      els.queueList.innerHTML = `<div class="empty">No one in the queue yet.</div>`;
-      return;
-    }
-
-    els.queueList.innerHTML = waiting
-      .map(
-        (d, i) => `
-      <div class="card card--enter ${d.id === myId ? "card--you" : ""}">
-        <div class="queue-item">
-          <div class="queue-item__num">${i + 1}.</div>
-          <div class="queue-item__info">
-            <div class="queue-item__name">${esc(d.name)}${d.id === myId ? " (You)" : ""}</div>
-            <div class="queue-item__project">${esc(d.project)}</div>
-          </div>
-        </div>
-      </div>`
-      )
-      .join("");
   }
 
   function esc(str) {

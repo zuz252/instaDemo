@@ -16,6 +16,8 @@
     statusText: document.getElementById("status-text"),
     queueCount: document.getElementById("queue-count"),
     pauseBtn: document.getElementById("pause-btn"),
+    seedBtn: document.getElementById("seed-btn"),
+    resetBtn: document.getElementById("reset-btn"),
     capInput: document.getElementById("cap-input"),
     capBtn: document.getElementById("cap-btn"),
     capClearBtn: document.getElementById("cap-clear-btn"),
@@ -157,6 +159,16 @@
   els.capClearBtn.addEventListener("click", () => {
     els.capInput.value = "";
     socket.emit("admin:set-cap", { token, cap: null });
+  });
+
+  els.seedBtn.addEventListener("click", () => {
+    socket.emit("admin:seed", { token });
+  });
+
+  els.resetBtn.addEventListener("click", () => {
+    if (confirm("Reset the queue? This wipes all demoers, the cap, and pause state.")) {
+      socket.emit("admin:reset", { token });
+    }
   });
 
   function render(state) {
