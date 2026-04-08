@@ -78,6 +78,12 @@ io.on("connection", (socket) => {
         error: "Queue is currently paused",
       });
     }
+    if (demoer.capReached) {
+      return socket.emit("join-result", {
+        success: false,
+        error: "Demo cap reached — no more spots available",
+      });
+    }
 
     socket.emit("join-result", { success: true, demoer });
     broadcastState();
@@ -126,6 +132,14 @@ io.on("connection", (socket) => {
       return socket.emit("admin:error", { message: "Unauthorized" });
     }
     queue.setPaused(paused);
+    broadcastState();
+  });
+
+  socket.on("admin:set-cap", ({ token, cap }) => {
+    if (!auth.validateToken(token)) {
+      return socket.emit("admin:error", { message: "Unauthorized" });
+    }
+    queue.setDemoCap(cap);
     broadcastState();
   });
 });

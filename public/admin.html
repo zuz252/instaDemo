@@ -38,6 +38,19 @@
       <button class="btn btn--small" id="pause-btn">Pause</button>
     </div>
 
+    <!-- Demo cap -->
+    <div class="status-bar" id="cap-bar">
+      <div class="status-bar__info">
+        <label for="cap-input" style="font-size: 0.85rem; font-weight: 600;">Demo Cap</label>
+        <span id="cap-status" style="font-size: 0.85rem; color: var(--gray-600);"></span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="number" id="cap-input" min="0" placeholder="No limit" style="width: 80px; padding: 4px 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 0.85rem;">
+        <button class="btn btn--small btn--primary" id="cap-btn">Set</button>
+        <button class="btn btn--small" id="cap-clear-btn">Clear</button>
+      </div>
+    </div>
+
     <!-- Current demoer -->
     <div id="current-section"></div>
 

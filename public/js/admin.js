@@ -16,6 +16,10 @@
     statusText: document.getElementById("status-text"),
     queueCount: document.getElementById("queue-count"),
     pauseBtn: document.getElementById("pause-btn"),
+    capInput: document.getElementById("cap-input"),
+    capBtn: document.getElementById("cap-btn"),
+    capClearBtn: document.getElementById("cap-clear-btn"),
+    capStatus: document.getElementById("cap-status"),
     currentSection: document.getElementById("current-section"),
     queueList: document.getElementById("queue-list"),
     qrSection: document.getElementById("qr-section"),
@@ -140,8 +144,24 @@
       });
   }
 
+  // Cap controls
+  els.capBtn.addEventListener("click", () => {
+    const val = parseInt(els.capInput.value, 10);
+    if (!val || val < 1) {
+      showToast("Enter a number greater than 0");
+      return;
+    }
+    socket.emit("admin:set-cap", { token, cap: val });
+  });
+
+  els.capClearBtn.addEventListener("click", () => {
+    els.capInput.value = "";
+    socket.emit("admin:set-cap", { token, cap: null });
+  });
+
   function render(state) {
     renderStatusBar(state);
+    renderCapBar(state);
     renderCurrent(state);
     renderQueue(state);
   }
@@ -166,6 +186,17 @@
     els.pauseBtn.onclick = () => {
       socket.emit("admin:pause", { token, paused: !state.paused });
     };
+  }
+
+  function renderCapBar(state) {
+    if (state.demoCap !== null) {
+      const remaining = Math.max(0, state.demoCap - state.totalDemoers);
+      els.capStatus.textContent = `${state.totalDemoers} / ${state.demoCap} spots used (${remaining} left)`;
+      els.capInput.placeholder = String(state.demoCap);
+    } else {
+      els.capStatus.textContent = "No limit set";
+      els.capInput.placeholder = "No limit";
+    }
   }
 
   function renderCurrent(state) {

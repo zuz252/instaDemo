@@ -58,12 +58,19 @@
 
   function renderStatus(state) {
     const { currentDemoer, paused } = state;
+    const capReached = state.demoCap !== null && state.totalDemoers >= state.demoCap;
 
     if (paused) {
       els.statusBanner.innerHTML = `
         <div class="banner banner--paused">
           <div class="banner__label">Queue Paused</div>
           <div>Not accepting signups right now</div>
+        </div>`;
+    } else if (capReached && !state.queue.some((d) => d.id === myId)) {
+      els.statusBanner.innerHTML = `
+        <div class="banner banner--paused">
+          <div class="banner__label">Queue Full</div>
+          <div>Demo cap of ${state.demoCap} has been reached</div>
         </div>`;
     } else if (currentDemoer) {
       els.statusBanner.innerHTML = `
@@ -116,14 +123,16 @@
 
   function renderJoinSection(state) {
     const inQueue = state.queue.some((d) => d.id === myId);
+    const capReached = state.demoCap !== null && state.totalDemoers >= state.demoCap;
     if (inQueue) {
       els.joinSection.classList.add("hidden");
     } else if (state.paused) {
-      // Show form but disabled when paused
+      els.joinSection.classList.remove("hidden");
+      els.joinBtn.disabled = true;
+    } else if (capReached) {
       els.joinSection.classList.remove("hidden");
       els.joinBtn.disabled = true;
     } else {
-      // Show form — either first time or after completing a demo
       els.joinSection.classList.remove("hidden");
       els.joinBtn.disabled = false;
     }
@@ -131,7 +140,8 @@
 
   function renderQueue(state) {
     const waiting = state.queue.filter((d) => d.status === "waiting");
-    els.queueHeader.textContent = `Queue (${waiting.length} waiting)`;
+    const capText = state.demoCap !== null ? ` · ${state.demoCap} max` : "";
+    els.queueHeader.textContent = `Queue (${waiting.length} waiting${capText})`;
 
     if (waiting.length === 0) {
       els.queueList.innerHTML = `<div class="empty">No one in the queue yet.</div>`;
