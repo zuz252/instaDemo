@@ -6,7 +6,6 @@ on:
 
 jobs:
   triage:
-    # Don't triage issues that already mention @claude (assistant will handle them)
     if: "!contains(github.event.issue.body, '@claude') && !contains(github.event.issue.title, '@claude')"
     runs-on: ubuntu-latest
     permissions:
@@ -56,10 +55,12 @@ jobs:
             });
 
             let text = response.content[0].text.trim();
-            // Strip markdown code fences if Claude wrapped the JSON (```json ... ``` or ``` ... ```)
-            text = text.replace(/^```(?:json)?\s*
-?/i, '').replace(/
-?```\s*$/, '').trim();
+            // Strip leading/trailing markdown code fences if present
+            if (text.startsWith('```')) {
+              text = text.replace(/^```[a-zA-Z]*/, '').trim();
+              const lastFence = text.lastIndexOf('```');
+              if (lastFence > -1) text = text.substring(0, lastFence).trim();
+            }
 
             let result;
             try {
